@@ -1,0 +1,16 @@
+wipe = true
+no-tests = true
+add-soft-deletes = true
+no-auto-timestamps = true
+no-hooks = true
+output = "database/entities"
+pkgname = "entities"
+
+[psql]
+dbname = "username-gjg"
+host = "localhost"
+port = "5432"
+user = "username-gjg"
+pass = "password-gjg"
+sslmode = "disable"
+blacklist = ["schema_migrations"]
