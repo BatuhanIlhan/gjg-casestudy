@@ -1,0 +1,1 @@
+CLUSTER VERBOSE "user" USING user_point;
