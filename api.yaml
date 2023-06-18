@@ -1,0 +1,170 @@
+swagger: "2.0"
+info:
+  title: GJG CASE STUDY API
+  description: Ranking Application
+  contact:
+    email: mbatuhanilhan@gmail.com
+  version: "1.0"
+
+produces:
+  - application/json
+consumes:
+  - application/json
+tags:
+  - name: "user"
+    description: "user endpoints"
+  - name: "submission"
+    description: "Score submission endpoints"
+
+paths:
+  /user/create:
+    post:
+      summary: Create user
+      tags:
+        - user
+      operationId: CreateUser
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateUserRequest"
+      responses:
+        200:
+          $ref: "#/responses/User"
+        400:
+          $ref: "#/responses/BadRequest"
+        500:
+          $ref: "#/responses/InternalServerError"
+
+  /score/submit:
+    post:
+      summary: Create submission
+      tags:
+        - submission
+      operationId: CreateSubmission
+      parameters:
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateSubmissionRequest"
+      responses:
+        200:
+          $ref: "#/responses/Submission"
+        400:
+          $ref: "#/responses/BadRequest"
+        500:
+          $ref: "#/responses/InternalServerError"
+
+responses:
+  User:
+    description: single user object
+    schema:
+      $ref: "#/definitions/User"
+  Submission:
+    description: single submission object
+    schema:
+      $ref: "#/definitions/Submission"
+  InternalServerError:
+    description: Unknown error has occurred
+    schema:
+      $ref: "#/definitions/ApiError"
+  BadRequest:
+    description: Given request format is not same with expected format or validation failed
+    schema:
+      $ref: "#/definitions/ApiError"
+  NotFound:
+    description: Entity not found with given parameters
+    schema:
+      $ref: "#/definitions/ApiError"
+
+
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      points:
+        type: number
+        format: double
+        description: total point of the user
+      country_code:
+        type: string
+        x-nullable: true
+        x-omitempty: false
+      rank:
+        type: integer
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+
+  Submission:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      user_id:
+        type: string
+        format: uuid
+      score:
+        type: number
+        format: double
+        description: total point of the user
+      createdAt:
+        type: string
+        format: date-time
+        example: 2021-12-18T03:00:00+03:00
+      updatedAt:
+        type: string
+        format: date-time
+        example: 2021-12-18T03:00:00+03:00
+
+  CreateUserRequest:
+    type: object
+    required:
+      - display_name
+    properties:
+      user_id:
+        type: string
+        format: uuid
+      display_name:
+        type: string
+      country_code:
+        type: string
+        x-nullable: true
+        x-omitempty: false
+      points:
+        type: number
+        format: double
+        x-nullable: true
+        x-omitempty: false
+
+  CreateSubmissionRequest:
+    type: object
+    required:
+      - score_worth
+      - user_id
+      - timestamp
+    properties:
+      user_id:
+        type: string
+        format: uuid
+      score_worth:
+        type: number
+        format: double
+      timestamp:
+        type: integer
+  ApiError:
+    type: object
+    properties:
+      code:
+        type: integer
+      error:
+        type: string
