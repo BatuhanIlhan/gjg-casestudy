@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-gjg
+    network_mode: bridge
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password-gjg
+      - POSTGRES_USER=username-gjg
+      - POSTGRES_HOST=localhost
+      - POSTGRES_PORT=5432
+      - POSTGRES_TIMEZONE=Europe/Istanbul
+      - POSTGRES_GORM_SSL_MODE=disable
+    volumes:
+        - ./pgdata:/var/lib/postgresql/data-gjg/pgdata
