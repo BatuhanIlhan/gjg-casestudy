@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"time"
 )
 
@@ -50,4 +51,21 @@ func (r *UserRepository) Create(ctx context.Context, payload UserCreatePayload) 
 		return nil, err
 	}
 	return entity, nil
+}
+
+func (r *UserRepository) Get(ctx context.Context, id string) (*entities.UserWithRank, error) {
+	user, err := entities.UserWithRanks(qm.Where("id = ?", id)).One(ctx, r.DB)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+func (r *UserRepository) GetLeaderBoard(ctx context.Context, limit, offset int, queries ...qm.QueryMod) (entities.UserWithRankSlice, error) {
+	queries = append(queries, qm.Limit(limit), qm.Offset(offset))
+	userWithRanks, err := entities.UserWithRanks(queries...).All(ctx, r.DB)
+	if err != nil {
+		return nil, err
+	}
+	return userWithRanks, nil
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/BatuhanIlhan/gjg-casestudy/common/errors"
 	"github.com/BatuhanIlhan/gjg-casestudy/database/entities"
 	"github.com/BatuhanIlhan/gjg-casestudy/repositories"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 type UserService struct {
@@ -35,4 +36,22 @@ func (s *UserService) Create(ctx context.Context, payload UserCreatePayload) (*e
 		return nil, errors.InternalServerError
 	}
 	return newUser, nil
+}
+
+func (s *UserService) Get(ctx context.Context, id string) (*entities.UserWithRank, *errors.ServiceError) {
+	user, RepoErr := s.userRepo.Get(ctx, id)
+	if RepoErr != nil {
+		fmt.Println(RepoErr)
+		return nil, errors.InternalServerError
+	}
+	return user, nil
+}
+
+func (s *UserService) GetLeaderBoard(ctx context.Context, limit, offset int, queries ...qm.QueryMod) (entities.UserWithRankSlice, *errors.ServiceError) {
+	userWithRanks, RepoErr := s.userRepo.GetLeaderBoard(ctx, limit, offset, queries...)
+	if RepoErr != nil {
+		fmt.Println(RepoErr)
+		return nil, errors.InternalServerError
+	}
+	return userWithRanks, nil
 }

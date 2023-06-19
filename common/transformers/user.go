@@ -7,6 +7,8 @@ import (
 )
 
 type UserTransformer func(entity *entities.User) *models.User
+type UserWithRankTransformer func(entity *entities.UserWithRank) *models.User
+type UserWithRankListTransformer func(entity entities.UserWithRankSlice) []*models.User
 
 //type UserListTransformer func(wallets entities.WalletSlice) []*models.Wallet
 
@@ -24,10 +26,28 @@ func User(entity *entities.User) *models.User {
 	}
 }
 
-//func WalletList(wallets entities.WalletSlice) []*models.Wallet {
-//	_users := make([]*models.Wallet, len(wallets))
-//	for index, wallet := range wallets {
-//		_users[index] = Wallet(wallet)
-//	}
-//	return _users
-//}
+func UserWithRank(entity *entities.UserWithRank) *models.User {
+	if entity == nil {
+		return nil
+	}
+	countryCode := &entity.CountryCode.String
+	return &models.User{
+		ID:          strfmt.UUID(entity.ID.String),
+		CountryCode: countryCode,
+		Points:      entity.Points.Float64,
+		CreatedAt:   strfmt.DateTime(entity.CreatedAt.Time),
+		UpdatedAt:   strfmt.DateTime(entity.UpdatedAt.Time),
+		Rank:        entity.Rank.Int64,
+	}
+}
+
+func UserWithRankList(entity entities.UserWithRankSlice) []*models.User {
+	if entity == nil {
+		return nil
+	}
+	_leaderboard := make([]*models.User, len(entity))
+	for index, user := range entity {
+		_leaderboard[index] = UserWithRank(user)
+	}
+	return _leaderboard
+}
