@@ -24,8 +24,7 @@ type CreateSubmissionRequest struct {
 	ScoreWorth *float64 `json:"score_worth"`
 
 	// timestamp
-	// Required: true
-	Timestamp *int64 `json:"timestamp"`
+	Timestamp int64 `json:"timestamp,omitempty"`
 
 	// user id
 	// Required: true
@@ -38,10 +37,6 @@ func (m *CreateSubmissionRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateScoreWorth(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateTimestamp(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -58,15 +53,6 @@ func (m *CreateSubmissionRequest) Validate(formats strfmt.Registry) error {
 func (m *CreateSubmissionRequest) validateScoreWorth(formats strfmt.Registry) error {
 
 	if err := validate.Required("score_worth", "body", m.ScoreWorth); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *CreateSubmissionRequest) validateTimestamp(formats strfmt.Registry) error {
-
-	if err := validate.Required("timestamp", "body", m.Timestamp); err != nil {
 		return err
 	}
 
