@@ -5,7 +5,9 @@ import (
 	"database/sql"
 	"github.com/BatuhanIlhan/gjg-casestudy/database/entities"
 	"github.com/google/uuid"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"time"
 )
 
@@ -24,7 +26,20 @@ func NewSubmissionRepository(db *sql.DB) *SubmissionRepository {
 	return &SubmissionRepository{db, uuid.NewString, time.Now}
 }
 
-func (r *SubmissionRepository) Create(ctx context.Context, payload SubmissionCreatePayload) (*entities.Submission, error) {
+func (r *SubmissionRepository) Create(ctx context.Context, payload SubmissionCreatePayload) (*entities.Submission, *float64, error) {
+	tx, err := r.DB.BeginTx(ctx, nil)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	defer func() { _ = tx.Rollback() }()
+
+	// check if user exist
+	user, err := entities.Users(qm.Where("id = ?", payload.UserId), qm.For("update")).One(ctx, tx)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	now := r.Clock()
 	entity := &entities.Submission{
@@ -41,9 +56,20 @@ func (r *SubmissionRepository) Create(ctx context.Context, payload SubmissionCre
 		entities.SubmissionColumns.CreatedAt,
 		entities.UserColumns.UpdatedAt,
 	}
-
-	if err := entity.Insert(ctx, r.DB, boil.Whitelist(columns...)); err != nil {
-		return nil, err
+	newScore := user.Points.Float64 + payload.Score
+	user.Points = null.Float64From(newScore)
+	user.UpdatedAt = now
+	updateFields := []string{entities.UserColumns.Points, entities.UserColumns.UpdatedAt}
+	_, err = user.Update(ctx, tx, boil.Whitelist(updateFields...))
+	if err != nil {
+		return nil, nil, err
 	}
-	return entity, nil
+	if err := entity.Insert(ctx, tx, boil.Whitelist(columns...)); err != nil {
+		return nil, nil, err
+	}
+	if err = tx.Commit(); err != nil {
+		return nil, nil, err
+	}
+
+	return entity, &newScore, nil
 }

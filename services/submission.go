@@ -20,15 +20,15 @@ func NewSubmissionService(repo *repositories.SubmissionRepository) *SubmissionSe
 	return &SubmissionService{submissionRepo: repo}
 }
 
-func (s *SubmissionService) Create(ctx context.Context, payload SubmissionCreatePayload) (*entities.Submission, *errors.ServiceError) {
+func (s *SubmissionService) Create(ctx context.Context, payload SubmissionCreatePayload) (*entities.Submission, *float64, *errors.ServiceError) {
 
-	newSubmission, RepoErr := s.submissionRepo.Create(ctx, repositories.SubmissionCreatePayload{
+	newSubmission, newScore, RepoErr := s.submissionRepo.Create(ctx, repositories.SubmissionCreatePayload{
 		UserId: payload.UserId,
 		Score:  payload.Score,
 	})
 
 	if RepoErr != nil {
-		return nil, errors.InternalServerError
+		return nil, nil, errors.InternalServerError
 	}
-	return newSubmission, nil
+	return newSubmission, newScore, nil
 }

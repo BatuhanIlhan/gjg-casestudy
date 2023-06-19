@@ -32,12 +32,10 @@ func (h *SubmissionHandler) Create(c *fiber.Ctx) error {
 		Score:  *request.ScoreWorth,
 	}
 
-	submission, err := h.service.Create(c.Context(), payload)
+	submission, newScore, err := h.service.Create(c.Context(), payload)
 	switch err {
 	case nil:
-		return c.Status(fiber.StatusOK).JSON(h.submissionTransformer(submission))
-	//case errors.WalletExist:
-	//	return common.RespondCatchedSerivceError(c, err)
+		return c.Status(fiber.StatusOK).JSON(h.submissionTransformer(submission, newScore))
 	default:
 		return common.RespondServiceError(c, err)
 	}

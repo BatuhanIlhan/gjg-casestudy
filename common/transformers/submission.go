@@ -6,21 +6,20 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-type SubmissionTransformer func(entity *entities.Submission) *models.Submission
+type SubmissionTransformer func(entity *entities.Submission, newScore *float64) *models.Submission
 
-//type UserListTransformer func(wallets entities.WalletSlice) []*models.Wallet
-
-func Submission(entity *entities.Submission) *models.Submission {
+func Submission(entity *entities.Submission, newScore *float64) *models.Submission {
 	if entity == nil {
 		return nil
 	}
 
 	return &models.Submission{
-		ID:        strfmt.UUID(entity.ID),
-		UserID:    strfmt.UUID(entity.UserID),
-		Score:     entity.Score,
-		CreatedAt: strfmt.DateTime(entity.CreatedAt),
-		UpdatedAt: strfmt.DateTime(entity.UpdatedAt),
+		ID:             strfmt.UUID(entity.ID),
+		UserID:         strfmt.UUID(entity.UserID),
+		SubmittedScore: entity.Score,
+		NewScore:       *newScore,
+		CreatedAt:      strfmt.DateTime(entity.CreatedAt),
+		UpdatedAt:      strfmt.DateTime(entity.UpdatedAt),
 	}
 }
 

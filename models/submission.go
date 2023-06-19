@@ -29,7 +29,10 @@ type Submission struct {
 	ID strfmt.UUID `json:"id,omitempty"`
 
 	// total point of the user
-	Score float64 `json:"score,omitempty"`
+	NewScore float64 `json:"new_score,omitempty"`
+
+	// submitted score
+	SubmittedScore float64 `json:"submitted_score,omitempty"`
 
 	// updated at
 	// Example: 2021-12-18T03:00:00+03:00
