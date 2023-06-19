@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"github.com/BatuhanIlhan/gjg-casestudy/database/entities"
 	"github.com/google/uuid"
-	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"time"
@@ -56,8 +55,8 @@ func (r *SubmissionRepository) Create(ctx context.Context, payload SubmissionCre
 		entities.SubmissionColumns.CreatedAt,
 		entities.UserColumns.UpdatedAt,
 	}
-	newScore := user.Points.Float64 + payload.Score
-	user.Points = null.Float64From(newScore)
+	newScore := user.Points + payload.Score
+	user.Points = newScore
 	user.UpdatedAt = now
 	updateFields := []string{entities.UserColumns.Points, entities.UserColumns.UpdatedAt}
 	_, err = user.Update(ctx, tx, boil.Whitelist(updateFields...))
