@@ -57,6 +57,20 @@ paths:
         500:
           $ref: "#/responses/InternalServerError"
 
+  /leaderboard:
+    get:
+      summary: Retrieve leaderboard
+      tags:
+        - user
+      operationId: ListUser
+      responses:
+        200:
+          $ref: "#/responses/LeaderBoard"
+        400:
+          $ref: "#/responses/BadRequest"
+        500:
+          $ref: "#/responses/InternalServerError"
+
 responses:
   User:
     description: single user object
@@ -66,6 +80,10 @@ responses:
     description: single submission object
     schema:
       $ref: "#/definitions/Submission"
+  LeaderBoard:
+    description: Leaderboard
+    schema:
+      $ref: "#/definitions/LeaderBoard"
   InternalServerError:
     description: Unknown error has occurred
     schema:
@@ -113,7 +131,10 @@ definitions:
       user_id:
         type: string
         format: uuid
-      score:
+      submitted_score:
+        type: number
+        format: double
+      new_score:
         type: number
         format: double
         description: total point of the user
@@ -151,7 +172,6 @@ definitions:
     required:
       - score_worth
       - user_id
-      - timestamp
     properties:
       user_id:
         type: string
@@ -168,3 +188,34 @@ definitions:
         type: integer
       error:
         type: string
+
+  LeaderBoard:
+    allOf:
+      - $ref: "#/definitions/PaginatedResponse"
+      - type: object
+        required:
+          - results
+        properties:
+          data:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+
+  PaginatedResponse:
+    type: object
+
+    properties:
+      offset:
+        type: integer
+        example: 10
+      limit:
+        type: integer
+        example: 5
+      total:
+        type: integer
+        description: How many total results exists for query
+        example: 100
+      count:
+        type: integer
+        description: How many result returned in data
+        example: 50
