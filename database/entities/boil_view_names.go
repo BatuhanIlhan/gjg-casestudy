@@ -4,4 +4,7 @@
 package entities
 
 var ViewNames = struct {
-}{}
+	UserWithRank string
+}{
+	UserWithRank: "user_with_rank",
+}

@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -21,3 +22,7 @@ func New(code int, message string, status int) *ServiceError {
 var (
 	InternalServerError = New(CodeInternalServerError, "Internal server error", fiber.StatusInternalServerError)
 )
+
+func NewQueryParameterRequired(param string) ServiceError {
+	return *New(600, fmt.Sprintf("Query parameter required: %v", param), fiber.StatusBadRequest)
+}
