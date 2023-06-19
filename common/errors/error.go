@@ -7,6 +7,7 @@ import (
 
 const (
 	CodeInternalServerError = 100
+	CodeUserError           = 200
 )
 
 type ServiceError struct {
@@ -21,6 +22,7 @@ func New(code int, message string, status int) *ServiceError {
 
 var (
 	InternalServerError = New(CodeInternalServerError, "Internal server error", fiber.StatusInternalServerError)
+	UserDoesNotExist    = New(CodeUserError, "User with given ID does not exist", fiber.StatusBadRequest)
 )
 
 func NewQueryParameterRequired(param string) ServiceError {
