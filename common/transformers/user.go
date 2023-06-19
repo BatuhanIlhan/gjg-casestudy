@@ -10,8 +10,6 @@ type UserTransformer func(entity *entities.User) *models.User
 type UserWithRankTransformer func(entity *entities.UserWithRank) *models.User
 type UserWithRankListTransformer func(entity entities.UserWithRankSlice) []*models.User
 
-//type UserListTransformer func(wallets entities.WalletSlice) []*models.Wallet
-
 func User(entity *entities.User) *models.User {
 	if entity == nil {
 		return nil

@@ -22,11 +22,3 @@ func Submission(entity *entities.Submission, newScore *float64) *models.Submissi
 		UpdatedAt:      strfmt.DateTime(entity.UpdatedAt),
 	}
 }
-
-//func WalletList(wallets entities.WalletSlice) []*models.Wallet {
-//	_users := make([]*models.Wallet, len(wallets))
-//	for index, wallet := range wallets {
-//		_users[index] = Wallet(wallet)
-//	}
-//	return _users
-//}

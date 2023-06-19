@@ -46,8 +46,6 @@ func (h *UserHandler) Create(c *fiber.Ctx) error {
 	switch err {
 	case nil:
 		return c.Status(fiber.StatusOK).JSON(h.userTransformer(user))
-	//case errors.WalletExist:
-	//	return common.RespondCatchedSerivceError(c, err)
 	default:
 		return common.RespondServiceError(c, err)
 	}
