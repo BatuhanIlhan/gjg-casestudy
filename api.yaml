@@ -115,6 +115,8 @@ definitions:
         x-omitempty: false
       rank:
         type: integer
+      display_name:
+        type: string
       createdAt:
         type: string
         format: date-time
