@@ -26,6 +26,9 @@ type User struct {
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"createdAt,omitempty"`
 
+	// display name
+	DisplayName string `json:"display_name,omitempty"`
+
 	// id
 	// Format: uuid
 	ID strfmt.UUID `json:"id,omitempty"`

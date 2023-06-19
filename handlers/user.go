@@ -65,6 +65,8 @@ func (h *UserHandler) GetById(c *fiber.Ctx) error {
 	switch err {
 	case nil:
 		return c.Status(fiber.StatusOK).JSON(h.userWithRankTransformer(user))
+	case errors.UserDoesNotExist:
+		return common.RespondCatchedSerivceError(c, err)
 	default:
 		return common.RespondServiceError(c, err) //500
 	}

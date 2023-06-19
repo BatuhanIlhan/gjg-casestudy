@@ -30,9 +30,13 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 func (r *UserRepository) Create(ctx context.Context, payload UserCreatePayload) (*entities.User, error) {
 
 	now := r.Clock()
+	var points float64
+	if payload.Points != nil {
+		points = *payload.Points
+	}
 	entity := &entities.User{
 		ID:          r.IdGenerator(),
-		Points:      null.Float64FromPtr(payload.Points),
+		Points:      points,
 		CountryCode: null.StringFromPtr(payload.CountryCode),
 		DisplayName: payload.DisplayName,
 		CreatedAt:   now,

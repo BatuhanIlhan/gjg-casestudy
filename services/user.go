@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/BatuhanIlhan/gjg-casestudy/common/errors"
 	"github.com/BatuhanIlhan/gjg-casestudy/database/entities"
@@ -40,9 +41,14 @@ func (s *UserService) Create(ctx context.Context, payload UserCreatePayload) (*e
 
 func (s *UserService) Get(ctx context.Context, id string) (*entities.UserWithRank, *errors.ServiceError) {
 	user, RepoErr := s.userRepo.Get(ctx, id)
+
 	if RepoErr != nil {
-		fmt.Println(RepoErr)
-		return nil, errors.InternalServerError
+		switch RepoErr {
+		case sql.ErrNoRows:
+			return nil, errors.UserDoesNotExist
+		default:
+			return nil, errors.InternalServerError
+		}
 	}
 	return user, nil
 }

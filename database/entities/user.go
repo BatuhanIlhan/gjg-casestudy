@@ -24,13 +24,13 @@ import (
 
 // User is an object representing the database table.
 type User struct {
-	ID          string       `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Points      null.Float64 `boil:"points" json:"points,omitempty" toml:"points" yaml:"points,omitempty"`
-	CountryCode null.String  `boil:"country_code" json:"country_code,omitempty" toml:"country_code" yaml:"country_code,omitempty"`
-	DisplayName string       `boil:"display_name" json:"display_name" toml:"display_name" yaml:"display_name"`
-	CreatedAt   time.Time    `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt   time.Time    `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
-	DeletedAt   null.Time    `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
+	ID          string      `boil:"id" json:"id" toml:"id" yaml:"id"`
+	Points      float64     `boil:"points" json:"points" toml:"points" yaml:"points"`
+	CountryCode null.String `boil:"country_code" json:"country_code,omitempty" toml:"country_code" yaml:"country_code,omitempty"`
+	DisplayName string      `boil:"display_name" json:"display_name" toml:"display_name" yaml:"display_name"`
+	CreatedAt   time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt   time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	DeletedAt   null.Time   `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
 
 	R *userR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L userL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -74,44 +74,6 @@ var UserTableColumns = struct {
 
 // Generated where
 
-type whereHelpernull_Float64 struct{ field string }
-
-func (w whereHelpernull_Float64) EQ(x null.Float64) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, false, x)
-}
-func (w whereHelpernull_Float64) NEQ(x null.Float64) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, true, x)
-}
-func (w whereHelpernull_Float64) LT(x null.Float64) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpernull_Float64) LTE(x null.Float64) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpernull_Float64) GT(x null.Float64) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpernull_Float64) GTE(x null.Float64) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-func (w whereHelpernull_Float64) IN(slice []float64) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelpernull_Float64) NIN(slice []float64) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-func (w whereHelpernull_Float64) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
-func (w whereHelpernull_Float64) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
-
 type whereHelpernull_String struct{ field string }
 
 func (w whereHelpernull_String) EQ(x null.String) qm.QueryMod {
@@ -152,7 +114,7 @@ func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereI
 
 var UserWhere = struct {
 	ID          whereHelperstring
-	Points      whereHelpernull_Float64
+	Points      whereHelperfloat64
 	CountryCode whereHelpernull_String
 	DisplayName whereHelperstring
 	CreatedAt   whereHelpertime_Time
@@ -160,7 +122,7 @@ var UserWhere = struct {
 	DeletedAt   whereHelpernull_Time
 }{
 	ID:          whereHelperstring{field: "\"user\".\"id\""},
-	Points:      whereHelpernull_Float64{field: "\"user\".\"points\""},
+	Points:      whereHelperfloat64{field: "\"user\".\"points\""},
 	CountryCode: whereHelpernull_String{field: "\"user\".\"country_code\""},
 	DisplayName: whereHelperstring{field: "\"user\".\"display_name\""},
 	CreatedAt:   whereHelpertime_Time{field: "\"user\".\"created_at\""},
@@ -197,8 +159,8 @@ type userL struct{}
 
 var (
 	userAllColumns            = []string{"id", "points", "country_code", "display_name", "created_at", "updated_at", "deleted_at"}
-	userColumnsWithoutDefault = []string{"id", "display_name", "created_at", "updated_at"}
-	userColumnsWithDefault    = []string{"points", "country_code", "deleted_at"}
+	userColumnsWithoutDefault = []string{"id", "points", "display_name", "created_at", "updated_at"}
+	userColumnsWithDefault    = []string{"country_code", "deleted_at"}
 	userPrimaryKeyColumns     = []string{"id"}
 	userGeneratedColumns      = []string{}
 )

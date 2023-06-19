@@ -20,7 +20,8 @@ func User(entity *entities.User) *models.User {
 	return &models.User{
 		ID:          strfmt.UUID(entity.ID),
 		CountryCode: countryCode,
-		Points:      entity.Points.Float64,
+		DisplayName: entity.DisplayName,
+		Points:      entity.Points,
 		CreatedAt:   strfmt.DateTime(entity.CreatedAt),
 		UpdatedAt:   strfmt.DateTime(entity.UpdatedAt),
 	}
@@ -35,6 +36,7 @@ func UserWithRank(entity *entities.UserWithRank) *models.User {
 		ID:          strfmt.UUID(entity.ID.String),
 		CountryCode: countryCode,
 		Points:      entity.Points.Float64,
+		DisplayName: entity.DisplayName.String,
 		CreatedAt:   strfmt.DateTime(entity.CreatedAt.Time),
 		UpdatedAt:   strfmt.DateTime(entity.UpdatedAt.Time),
 		Rank:        entity.Rank.Int64,
