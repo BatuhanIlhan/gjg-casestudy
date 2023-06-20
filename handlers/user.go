@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-const DEFAULTLIMITVALUE = 2
+const DEFAULTLIMITVALUE = 1000
 const DEFAULTOFFSETVALUE = 0
 
 type UserHandler struct {
